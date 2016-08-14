@@ -12,27 +12,29 @@ namespace easypack
 class UnPack : private NonCopyable
 {
 public:
-    void parse(const std::string& content)
-    {
-        m_is.str(content);
-    }
+    UnPack(const std::string& content) : m_is(content), m_ia(m_is) {}
 
     template<typename... Args>
     void unpack(Args&&... args)
     {
-        boost::archive::binary_iarchive ia(m_is);
-        unpackArgs(ia, std::forward<Args>(args)...);
+        unpackArgs(m_ia, std::forward<Args>(args)...);
     }
 
     template<typename Tuple>
     typename std::enable_if<is_tuple<Tuple>::value>::type unpack(Tuple&& t)
     {
-        boost::archive::binary_iarchive ia(m_is);
-        unpackTuple(ia, std::forward<Tuple>(t));
+        unpackTuple(m_ia, std::forward<Tuple>(t));
+    }
+
+    template<typename T>
+    void unpackTop(T& t)
+    {
+        m_ia >> t;
     }
 
 private:
     std::istringstream m_is;
+    boost::archive::binary_iarchive m_ia;
 };
 
 }
