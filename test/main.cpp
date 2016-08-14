@@ -8,24 +8,18 @@ void testBaseType()
     {
         int age = 20;
         std::string name = "Jack";
-        std::vector<int> vec { 1, 2 };
         easypack::Pack p;
-        p.pack(age, name, vec);
+        p.pack(age, name);
 
         int age2 = 0;
         std::string name2;
         std::string address2;
-        std::vector<int> vec2;
         easypack::UnPack up;
         up.parse(p.getString());
-        up.unpack(age2, name2, vec2);
+        up.unpack(age2, name2);
 
         std::cout << age2 << std::endl;
         std::cout << name2 << std::endl;
-        for (auto& iter : vec2)
-        {
-            std::cout << iter << std::endl;
-        }
     }
     catch (std::exception& e)
     {
@@ -97,11 +91,46 @@ void testTuple()
     }
 }
 
+struct PersonInfo
+{
+    std::string name;
+    int age;
+
+    template<class Archive>
+    void serialize(Archive& ar, const unsigned int)
+    {
+        ar & name;
+        ar & age;
+    }
+};
+
+void testClass()
+{
+    std::cout << "Test class type:" << std::endl;
+    try
+    {
+        PersonInfo info { "Jack", 20 };
+        easypack::Pack p;
+        p.pack(info);
+
+        PersonInfo person;
+        easypack::UnPack up;
+        up.parse(p.getString());
+        up.unpack(person);
+        std::cout << person.name << " " << person.age << std::endl;
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl;
+    }
+}
+
 int main()
 {
     testBaseType();
     testSTL();
     testTuple();
+    testClass();
     return 0;
 }
 
