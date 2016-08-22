@@ -21,6 +21,8 @@
 #include <boost/serialization/unordered_set.hpp>
 #include <boost/serialization/boost_unordered_map.hpp>
 #include <boost/serialization/boost_unordered_set.hpp>
+#include <boost/serialization/version.hpp>
+#include <boost/serialization/split_member.hpp>
 
 class NonCopyable
 {
