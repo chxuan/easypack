@@ -3,7 +3,7 @@ Serialization framework based on boost.serialization
 
 ## 简介
 
-easypack是基于[boost.serialization][1]的二进制序列化框架，使用极其方便。
+[easypack][1]是基于[boost.serialization][2]的二进制序列化框架，使用极其方便。
 
 ## Examples
     
@@ -93,8 +93,9 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
 * `Windows x86_64` Visual Studio 2015
 
 ## License
-This software is licensed under the [MIT license][2]. © 2016 chxuan
+This software is licensed under the [MIT license][3]. © 2016 chxuan
 
 
-  [1]: http://www.boost.org/
-  [2]: https://github.com/chxuan/easypack/blob/master/LICENSE
+  [1]: https://github.com/chxuan/easypack
+  [2]: http://www.boost.org/
+  [3]: https://github.com/chxuan/easypack/blob/master/LICENSE
