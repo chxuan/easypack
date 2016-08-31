@@ -13,7 +13,6 @@ void testBaseType()
 
         int age2 = 0;
         std::string name2;
-        std::string address2;
         easypack::UnPack up(p.getString());
         /* up.unpack(age2, name2); */
         up.unpackTop(age2);
