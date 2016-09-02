@@ -25,7 +25,7 @@ if(DEFINE_BOOST_SERIALIZATION)
 endif(DEFINE_BOOST_SERIALIZATION)
 
 if(DEFINE_MSGPACK)
-    include_directories(${PROJECT_SOURCE_DIR}/../3rdparty/msgpack-c/include)
+    include_directories(${PROJECT_SOURCE_DIR}/../msgpack)
 endif(DEFINE_MSGPACK)
 
 if(DEFINE_BOOST_SERIALIZATION)
