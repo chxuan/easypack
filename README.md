@@ -14,12 +14,7 @@ Serialization framework based on boost.serialization and msgpack
 
     git submodule update --init --recursive
     
-在编译时需要指定序列化/反序列化框架，以cmake为例。
-
-    // 使用boost.serialization序列化/反序列框架
-    cmake -DDEFINE_BOOST_SERIALIZATION=ON .
-    // 或者使用msgpack序列化/反序列框架
-    cmake -DDEFINE_MSGPACK=ON .
+在编译时需要指定序列化/反序列化框架，添加`ENABLE_BOOST_SERIALIZATION`来启用boost.serialization序列化/反序列框架，添加`ENABLE_MSGPACK`来启用msgpack序列化/反序列框架。
 
 ## Examples
     
@@ -93,6 +88,7 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     easypack::UnPack up(p.getString());
     up.unpack(person);
     ```
+    boost序列化用户自定义类，更多细节请查看[官网][4]。
     
     * **msgpack user-defined classes**
 
@@ -113,6 +109,7 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     easypack::UnPack up(p.getString());
     up.unpack(person);
     ```
+    msgpack序列化用户自定义类，更多细节请查看[官网][5]。
 
 ## 依赖性
 
@@ -126,10 +123,12 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
 * `Windows x86_64` Visual Studio 2015
 
 ## License
-This software is licensed under the [MIT license][4]. © 2016 chxuan
+This software is licensed under the [MIT license][6]. © 2016 chxuan
 
 
   [1]: https://github.com/chxuan/easypack
   [2]: http://www.boost.org/
   [3]: https://github.com/msgpack/msgpack-c
-  [4]: https://github.com/chxuan/easypack/blob/master/LICENSE
+  [4]: http://www.boost.org/
+  [5]: http://msgpack.org/
+  [6]: https://github.com/chxuan/easypack/blob/master/LICENSE
