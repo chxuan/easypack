@@ -90,7 +90,7 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     ```
     boost序列化用户自定义类，更多细节请查看[官网][4]。
     
-    * **msgpack user-defined classes**
+* **msgpack user-defined classes**
 
     ```cpp
     struct PersonInfo
