@@ -1,13 +1,29 @@
-Serialization framework based on boost.serialization
+Serialization framework based on boost.serialization and msgpack
 ===============================================
 
 ## 简介
 
-[easypack][1]是基于[boost.serialization][2]的二进制序列化框架，使用极其方便。
+[easypack][1]是基于[boost.serialization][2]和[msgpack][3]的序列化/反序列化框架，header-only，使用极其方便。
+
+## Getting started
+首先下载easypack：
+
+    git clone https://github.com/chxuan/easypack.git
+
+然后下载依赖的第三方库：
+
+    git submodule update --init --recursive
+    
+在编译时需要指定序列化/反序列化框架，以cmake为例。
+
+    // 使用boost.serialization序列化/反序列框架
+    cmake -DDEFINE_BOOST_SERIALIZATION=ON .
+    // 或者使用msgpack序列化/反序列框架
+    cmake -DDEFINE_MSGPACK=ON .
 
 ## Examples
     
-* **基本类型**
+* **base type**
 
     ```cpp
     int age = 20;
@@ -37,27 +53,23 @@ Serialization framework based on boost.serialization
     ```  
 boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提供了和序列化基本类型一样的接口。
 
-* **STL类型**
+* **STL type**
 
     ```cpp
     std::vector<int> vec { 1, 2 };
     std::unordered_map<int, std::string> m;
-    std::stack<int> s;
-    s.push(100);
-    s.push(200);
     m.emplace(1, "Hello");
     m.emplace(2, "world");
     easypack::Pack p;
-    p.pack(vec, m, s);
+    p.pack(vec, m);
 
     std::vector<int> vec2;
     std::unordered_map<int, std::string> m2;
-    std::stack<int> s2;
     easypack::UnPack up(p.getString());
-    up.unpack(vec2, m2, s2);
+    up.unpack(vec2, m2);
     ```
 
-* **类类型**
+* **boost.serialization user-defined classes**
 
     ```cpp
     struct PersonInfo
@@ -81,10 +93,31 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     easypack::UnPack up(p.getString());
     up.unpack(person);
     ```
+    
+    * **msgpack user-defined classes**
+
+    ```cpp
+    struct PersonInfo
+    {
+        std::string name;
+        int age;
+
+        MSGPACK_DEFINE(name, age);
+    };
+    
+    PersonInfo info { "Jack", 20 };
+    easypack::Pack p;
+    p.pack(info);
+
+    PersonInfo person;
+    easypack::UnPack up(p.getString());
+    up.unpack(person);
+    ```
 
 ## 依赖性
 
 * boost.serialization
+* msgpack
 * c++11
 
 ## 兼容性
@@ -93,9 +126,10 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
 * `Windows x86_64` Visual Studio 2015
 
 ## License
-This software is licensed under the [MIT license][3]. © 2016 chxuan
+This software is licensed under the [MIT license][4]. © 2016 chxuan
 
 
   [1]: https://github.com/chxuan/easypack
   [2]: http://www.boost.org/
-  [3]: https://github.com/chxuan/easypack/blob/master/LICENSE
+  [3]: https://github.com/msgpack/msgpack-c
+  [4]: https://github.com/chxuan/easypack/blob/master/LICENSE
