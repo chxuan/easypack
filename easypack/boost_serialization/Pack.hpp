@@ -9,9 +9,11 @@
 namespace easypack
 {
 
-class Pack : private NonCopyable
+class Pack
 {
 public:
+    Pack(const Pack&) = delete;
+    Pack& operator=(const Pack&) = delete;
     Pack() : m_oa(m_os) {}
 
     template<typename... Args>

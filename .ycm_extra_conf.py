@@ -87,6 +87,8 @@ flags = [
 # 3rdParty include path
 '-isystem',
 '/usr/local/3rdParty/boost/include',
+'-isystem',
+'./3rdparty/msgpack-c/include',
 
 # project include path
 '-isystem',

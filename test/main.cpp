@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <unordered_map>
 #include "easypack/EasyPack.hpp"
 
 void testBaseType()
@@ -14,12 +16,12 @@ void testBaseType()
         int age2 = 0;
         std::string name2;
         easypack::UnPack up(p.getString());
-        /* up.unpack(age2, name2); */
-        up.unpackTop(age2);
-        up.unpackTop(name2);
+        up.unpack(age2, name2);
+        /* up.unpackTop(age2); */
+        /* up.unpackTop(name2); */
 
-        std::cout << age2 << std::endl;
-        std::cout << name2 << std::endl;
+        std::cout << "age: " << age2 << std::endl;
+        std::cout << "name: " << name2 << std::endl;
     }
     catch (std::exception& e)
     {
@@ -34,19 +36,15 @@ void testSTL()
     {
         std::vector<int> vec { 1, 2 };
         std::unordered_map<int, std::string> m;
-        std::stack<int> s;
-        s.push(100);
-        s.push(200);
         m.emplace(1, "Hello");
         m.emplace(2, "world");
         easypack::Pack p;
-        p.pack(vec, m, s);
+        p.pack(vec, m);
 
         std::vector<int> vec2;
         std::unordered_map<int, std::string> m2;
-        std::stack<int> s2;
         easypack::UnPack up(p.getString());
-        up.unpack(vec2, m2, s2);
+        up.unpack(vec2, m2);
 
         for (auto& iter : vec2)
         {
@@ -55,11 +53,6 @@ void testSTL()
         for (auto& iter : m2)
         {
             std::cout << "key: " << iter.first << ", value: " << iter.second << std::endl;
-        }
-        while (!s2.empty())
-        {
-            std::cout << s2.top() << std::endl;
-            s2.pop(); 
         }
     }
     catch (std::exception& e)
@@ -89,6 +82,7 @@ void testTuple()
     }
 }
 
+#ifdef ENABLE_BOOST_SERIALIZATION
 struct PersonInfo
 {
     std::string name;
@@ -104,7 +98,7 @@ struct PersonInfo
 
 void testClass()
 {
-    std::cout << "Test class type:" << std::endl;
+    std::cout << "Test boost.serialization user-defined classes type:" << std::endl;
     try
     {
         PersonInfo info { "Jack", 20 };
@@ -121,6 +115,37 @@ void testClass()
         std::cout << "Exception: " << e.what() << std::endl;
     }
 }
+#endif
+
+#ifdef ENABLE_MSGPACK
+struct PersonInfo
+{
+    std::string name;
+    int age;
+
+    MSGPACK_DEFINE(name, age);
+};
+
+void testClass()
+{
+    std::cout << "Test msgpack user-defined classes type:" << std::endl;
+    try
+    {
+        PersonInfo info { "Jack", 20 };
+        easypack::Pack p;
+        p.pack(info);
+
+        PersonInfo person;
+        easypack::UnPack up(p.getString());
+        up.unpack(person);
+        std::cout << person.name << " " << person.age << std::endl;
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl;
+    }
+}
+#endif
 
 int main()
 {

@@ -9,10 +9,13 @@
 namespace easypack
 {
 
-class UnPack : private NonCopyable
+class UnPack
 {
 public:
-    UnPack(const std::string& content) : m_is(content), m_ia(m_is) {}
+    UnPack() = default;
+    UnPack(const UnPack&) = delete;
+    UnPack& operator=(const UnPack&) = delete;
+    UnPack(const std::string& content) : m_is(std::move(content)), m_ia(m_is) {}
 
     template<typename... Args>
     void unpack(Args&&... args)
