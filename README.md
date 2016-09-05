@@ -3,7 +3,7 @@ Serialization framework based on boost.serialization and msgpack
 
 ## 简介
 
-[easypack][1]是基于[boost.serialization][2]和[msgpack][3]的序列化/反序列化框架，header-only，使用极其方便。
+[easypack][1]是基于[boost.serialization][2]和[msgpack][3]的序列化框架，header-only，使用极其方便。
 
 ## Getting started
 首先下载easypack：
@@ -14,9 +14,9 @@ Serialization framework based on boost.serialization and msgpack
 
     git submodule update --init --recursive
     
-在编译时需要指定序列化/反序列化框架，添加`ENABLE_BOOST_SERIALIZATION`来启用boost.serialization序列化/反序列框架，添加`ENABLE_MSGPACK`来启用msgpack序列化/反序列框架。
+在编译时需要指定序列化框架，添加`ENABLE_BOOST_SERIALIZATION`宏定义来启用boost.serialization序列化框架，添加`ENABLE_MSGPACK`宏定义来启用msgpack序列化框架。
 
-## Examples
+## Tutorial
     
 * **base type**
 
