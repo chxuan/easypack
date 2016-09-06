@@ -67,14 +67,21 @@ void testTuple()
     try
     {
         std::tuple<int, std::string> tp = std::make_tuple(10, "Tom");
+        std::tuple<int, std::string> tpp = std::make_tuple(11, "Jack");
+        std::string name = "Marlin";
         easypack::Pack p;
-        p.pack(tp);
+        p.pack(tp, tpp, name);
 
         std::tuple<int, std::string> tp2;
+        std::tuple<int, std::string> tpp2;
+        std::string name2;
         easypack::UnPack up(p.getString());
-        up.unpack(tp2);
+        up.unpack(tp2, tpp2, name2);
         std::cout << std::get<0>(tp2) << std::endl;
         std::cout << std::get<1>(tp2) << std::endl;
+        std::cout << std::get<0>(tpp2) << std::endl;
+        std::cout << std::get<1>(tpp2) << std::endl;
+        std::cout << name2 << std::endl;
     }
     catch (std::exception& e)
     {

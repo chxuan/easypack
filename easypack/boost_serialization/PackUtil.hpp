@@ -3,27 +3,10 @@
 
 #include <tuple>
 #include "Comment.hpp"
+#include "Traits.hpp"
 
 namespace easypack
 {
-
-void packArgs(boost::archive::binary_oarchive&) {}
-
-template<typename T, typename... Args>
-void packArgs(boost::archive::binary_oarchive& oa, T&& t, Args&&... args)
-{
-    oa << t;
-    packArgs(oa, std::forward<Args>(args)...);
-}
-
-void unpackArgs(boost::archive::binary_iarchive&) {}
-
-template<typename T, typename... Args>
-void unpackArgs(boost::archive::binary_iarchive& ia, T&& t, Args&&... args)
-{
-    ia >> t;
-    unpackArgs(ia, std::forward<Args>(args)...);
-}
 
 template<typename Tuple, std::size_t N>
 struct PackTuple
@@ -73,6 +56,38 @@ template<typename... Args>
 void unpackTuple(boost::archive::binary_iarchive& ia, std::tuple<Args...>& t)
 {
     UnPackTuple<decltype(t), sizeof...(Args)>::foreach(ia, t);
+}
+
+void packArgs(boost::archive::binary_oarchive&) {}
+
+template<typename T, typename... Args>
+typename std::enable_if<!is_tuple<T>::value>::type packArgs(boost::archive::binary_oarchive& oa, T&& t, Args&&... args)
+{
+    oa << t;
+    packArgs(oa, std::forward<Args>(args)...);
+}
+
+template<typename T, typename... Args>
+typename std::enable_if<is_tuple<T>::value>::type packArgs(boost::archive::binary_oarchive& oa, T&& t, Args&&... args)
+{
+    packTuple(oa, std::forward<T>(t));
+    packArgs(oa, std::forward<Args>(args)...);
+}
+
+void unpackArgs(boost::archive::binary_iarchive&) {}
+
+template<typename T, typename... Args>
+typename std::enable_if<!is_tuple<T>::value>::type unpackArgs(boost::archive::binary_iarchive& ia, T&& t, Args&&... args)
+{
+    ia >> t;
+    unpackArgs(ia, std::forward<Args>(args)...);
+}
+
+template<typename T, typename... Args>
+typename std::enable_if<is_tuple<T>::value>::type unpackArgs(boost::archive::binary_iarchive& ia, T&& t, Args&&... args)
+{
+    unpackTuple(ia, std::forward<T>(t));
+    unpackArgs(ia, std::forward<Args>(args)...);
 }
 
 }

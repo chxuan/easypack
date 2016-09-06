@@ -4,7 +4,6 @@
 #include <sstream>
 #include "Comment.hpp"
 #include "PackUtil.hpp"
-#include "Traits.hpp"
 
 namespace easypack
 {
@@ -21,12 +20,6 @@ public:
     void unpack(Args&&... args)
     {
         unpackArgs(m_ia, std::forward<Args>(args)...);
-    }
-
-    template<typename Tuple>
-    typename std::enable_if<is_tuple<Tuple>::value>::type unpack(Tuple&& t)
-    {
-        unpackTuple(m_ia, std::forward<Tuple>(t));
     }
 
     template<typename T>
