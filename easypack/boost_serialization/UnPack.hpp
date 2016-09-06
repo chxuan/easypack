@@ -25,7 +25,7 @@ public:
     template<typename T>
     void unpackTop(T& t)
     {
-        m_ia >> t;
+        unpackArgs(m_ia, t);
     }
 
 private:

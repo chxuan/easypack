@@ -24,8 +24,7 @@ public:
     template<typename T>
     void unpackTop(T& t)
     {
-        auto oh = msgpack::unpack(m_content.data(), m_content.size(), m_offset);
-        t = oh.get().as<typename std::decay<T>::type>();
+        unpackArgs(m_content, m_offset, t);
     }
 
 private:
