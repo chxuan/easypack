@@ -29,6 +29,7 @@ void testBaseType()
     }
 }
 
+#if 0
 void testSTL()
 {
     std::cout << "Test stl type:" << std::endl;
@@ -89,53 +90,33 @@ void testTuple()
     }
 }
 
-#ifdef ENABLE_BOOST_SERIALIZATION
 struct PersonInfo
 {
     std::string name;
     int age;
 
+#ifdef ENABLE_BOOST_SERIALIZATION
     template<class Archive>
     void serialize(Archive& ar, const unsigned int)
     {
         ar & name;
         ar & age;
     }
-};
-
-void testClass()
-{
-    std::cout << "Test boost.serialization user-defined classes type:" << std::endl;
-    try
-    {
-        PersonInfo info { "Jack", 20 };
-        easypack::Pack p;
-        p.pack(info);
-
-        PersonInfo person;
-        easypack::UnPack up(p.getString());
-        up.unpack(person);
-        std::cout << person.name << " " << person.age << std::endl;
-    }
-    catch (std::exception& e)
-    {
-        std::cout << "Exception: " << e.what() << std::endl;
-    }
-}
 #endif
 
 #ifdef ENABLE_MSGPACK
-struct PersonInfo
-{
-    std::string name;
-    int age;
-
     MSGPACK_DEFINE(name, age);
+#endif
 };
 
 void testClass()
 {
+#ifdef ENABLE_BOOST_SERIALIZATION
+    std::cout << "Test boost.serialization user-defined classes type:" << std::endl;
+#endif
+#ifdef ENABLE_MSGPACK
     std::cout << "Test msgpack user-defined classes type:" << std::endl;
+#endif
     try
     {
         PersonInfo info { "Jack", 20 };
@@ -157,9 +138,9 @@ void testClass()
 int main()
 {
     testBaseType();
-    testSTL();
-    testTuple();
-    testClass();
+    /* testSTL(); */
+    /* testTuple(); */
+    /* testClass(); */
     return 0;
 }
 

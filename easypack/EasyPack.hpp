@@ -9,4 +9,8 @@
 #include "messagepack/MessagePackHead.hpp"
 #endif
 
+#ifdef ENABLE_JSON
+#include "json/JsonPackHead.hpp"
+#endif
+
 #endif

@@ -89,6 +89,8 @@ flags = [
 '/usr/local/3rdParty/boost/include',
 '-isystem',
 './msgpack',
+'-isystem',
+'./kapok',
 
 # project include path
 '-isystem',
