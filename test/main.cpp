@@ -29,7 +29,6 @@ void testBaseType()
     }
 }
 
-#if 0
 void testSTL()
 {
     std::cout << "Test stl type:" << std::endl;
@@ -72,6 +71,7 @@ void testTuple()
         std::string name = "Marlin";
         easypack::Pack p;
         p.pack(tp, tpp, name);
+        std::cout << p.getString() << std::endl;
 
         std::tuple<int, std::string> tp2;
         std::tuple<int, std::string> tpp2;
@@ -107,6 +107,10 @@ struct PersonInfo
 #ifdef ENABLE_MSGPACK
     MSGPACK_DEFINE(name, age);
 #endif
+
+#ifdef ENABLE_JSON
+    META(name, age);
+#endif
 };
 
 void testClass()
@@ -114,9 +118,15 @@ void testClass()
 #ifdef ENABLE_BOOST_SERIALIZATION
     std::cout << "Test boost.serialization user-defined classes type:" << std::endl;
 #endif
+
 #ifdef ENABLE_MSGPACK
     std::cout << "Test msgpack user-defined classes type:" << std::endl;
 #endif
+
+#ifdef ENABLE_JSON
+    std::cout << "Test json user-defined classes type:" << std::endl;
+#endif
+
     try
     {
         PersonInfo info { "Jack", 20 };
@@ -133,14 +143,13 @@ void testClass()
         std::cout << "Exception: " << e.what() << std::endl;
     }
 }
-#endif
 
 int main()
 {
     testBaseType();
-    /* testSTL(); */
-    /* testTuple(); */
-    /* testClass(); */
+    testSTL();
+    testTuple();
+    testClass();
     return 0;
 }
 
