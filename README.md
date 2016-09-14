@@ -1,9 +1,9 @@
-Serialization framework based on boost.serialization and msgpack
+Serialization framework based on boost.serialization、msgpack and json.
 ===============================================
 
 ## 简介
 
-[easypack][1]是基于[boost.serialization][2]和[msgpack][3]的序列化框架，header-only，使用极其方便。
+[easypack][1]是基于[boost.serialization][2]、[msgpack][3]和[kapok][4]的序列化框架，header-only，使用极其方便。
 
 ## Getting started
 首先下载easypack：
@@ -14,11 +14,11 @@ Serialization framework based on boost.serialization and msgpack
 
     git submodule update --init --recursive
     
-在编译时需要指定序列化框架，添加`ENABLE_BOOST_SERIALIZATION`宏定义来启用boost.serialization序列化框架，添加`ENABLE_MSGPACK`宏定义来启用msgpack序列化框架。
+在编译时需要指定序列化框架，添加`ENABLE_BOOST_SERIALIZATION`宏定义来启用boost.serialization序列化框架，添加`ENABLE_MSGPACK`宏定义来启用msgpack序列化框架，添加`ENABLE_JSON`宏定义来启用json序列化框架。
 
 ## Tutorial
     
-* **base type**
+ * **base type**
 
     ```cpp
     int age = 20;
@@ -35,7 +35,7 @@ Serialization framework based on boost.serialization and msgpack
     ```  
 可以看到，pack/unpack支持变参，并且还支持出栈式反序列化，使用非常方便。
 
-* **std::tuple**
+ * **std::tuple**
 
     ```cpp
     std::tuple<int, std::string> tp = std::make_tuple(10, "Tom");
@@ -48,7 +48,7 @@ Serialization framework based on boost.serialization and msgpack
     ```  
 boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提供了和序列化基本类型一样的接口。
 
-* **STL type**
+ * **STL type**
 
     ```cpp
     std::vector<int> vec { 1, 2 };
@@ -64,41 +64,30 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     up.unpack(vec2, m2);
     ```
 
-* **boost.serialization user-defined classes**
+ * **user-defined classes**
 
     ```cpp
     struct PersonInfo
     {
         std::string name;
         int age;
-
+        
+    #ifdef ENABLE_BOOST_SERIALIZATION
         template<class Archive>
         void serialize(Archive& ar, const unsigned int)
         {
             ar & name;
             ar & age;
         }
-    };
+    #endif
     
-    PersonInfo info { "Jack", 20 };
-    easypack::Pack p;
-    p.pack(info);
-
-    PersonInfo person;
-    easypack::UnPack up(p.getString());
-    up.unpack(person);
-    ```
-    boost序列化用户自定义类，更多细节请查看[官网][4]。
-    
-* **msgpack user-defined classes**
-
-    ```cpp
-    struct PersonInfo
-    {
-        std::string name;
-        int age;
-
+    #ifdef ENABLE_MSGPACK
         MSGPACK_DEFINE(name, age);
+    #endif
+    
+    #ifdef ENABLE_JSON
+        META(name, age);
+    #endif
     };
     
     PersonInfo info { "Jack", 20 };
@@ -109,26 +98,34 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     easypack::UnPack up(p.getString());
     up.unpack(person);
     ```
-    msgpack序列化用户自定义类，更多细节请查看[官网][5]。
+    [boost][5]、[msgpack][6]、[kapok][7]序列化用户自定义类，更多细节请查看各自官网。
+    
+## Warning
 
+ * 不支持指针，仅支持桟对象序列化。
+
+    
 ## 依赖性
 
 * boost.serialization
 * msgpack
+* kapok
 * c++11
 
 ## 兼容性
 
-* `Linux x86_64` gcc 4.8, gcc4.9, gcc 5.
+* `Linux x86_64` gcc4.9, gcc 5, gcc 6.
 * `Windows x86_64` Visual Studio 2015
 
 ## License
-This software is licensed under the [MIT license][6]. © 2016 chxuan
+This software is licensed under the [MIT license][8]. © 2016 chxuan
 
 
   [1]: https://github.com/chxuan/easypack
   [2]: http://www.boost.org/
   [3]: https://github.com/msgpack/msgpack-c
-  [4]: http://www.boost.org/
-  [5]: http://msgpack.org/
-  [6]: https://github.com/chxuan/easypack/blob/master/LICENSE
+  [4]: https://github.com/qicosmos/Kapok
+  [5]: http://www.boost.org/
+  [6]: https://github.com/msgpack/msgpack-c
+  [7]: https://github.com/qicosmos/Kapok
+  [8]: https://github.com/chxuan/easypack/blob/master/LICENSE
