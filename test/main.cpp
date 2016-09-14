@@ -71,7 +71,6 @@ void testTuple()
         std::string name = "Marlin";
         easypack::Pack p;
         p.pack(tp, tpp, name);
-        std::cout << p.getString() << std::endl;
 
         std::tuple<int, std::string> tp2;
         std::tuple<int, std::string> tpp2;

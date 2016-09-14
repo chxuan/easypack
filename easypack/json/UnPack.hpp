@@ -23,34 +23,49 @@ public:
         m_deserializer.Parse(m_content);
         std::tuple<typename std::decay<Args>::type...> tp;
         m_deserializer.Deserialize(tp);
-        m_vec.reserve(sizeof...(Args));
-        tuple2vector(m_vec, tp);
-        const std::size_t offset = 0;
-        unpackArgs(m_vec, offset, std::forward<Args>(args)...);
+        std::vector<boost::any> vec;
+        vec.reserve(sizeof...(Args));
+        tuple2vector(vec, tp);
+        unpackArgs(vec, m_offset, std::forward<Args>(args)...);
     }
 
-#if 0
     template<typename T>
     void unpackTop(T& t)
+    {
+        m_deserializer.Parse(parse());
+        m_deserializer.Deserialize(t);
+    }
+
+private:
+    std::string parse()
     {
         rapidjson::Document doc;
         doc.Parse<0>(m_content.c_str());
         if (doc.HasParseError())
         {
-            /* throw std::runtime_error(std::string(doc.GetParseError())); */
+            throw std::runtime_error("Parsing to document failed.");
         }
-        for (SizeType i = 0; i < doc.Size(); ++i)
+
+        if (!doc.IsArray())
         {
-            /* std::cout << doc[i].GetObject() << std::endl; */
-            doc[i].GetObject();
+            throw std::runtime_error("Json format error.");
         }
+
+        if (m_offset >= doc.Size())
+        {
+            throw std::runtime_error("Offset out of range.");
+        }
+
+        rapidjson::StringBuffer sb;
+        rapidjson::Writer<StringBuffer> writer(sb);
+        doc[m_offset].Accept(writer);
+        ++m_offset;   
+        return sb.GetString();
     }
-#endif
 
 private:
     std::string m_content;
     std::size_t m_offset = 0;
-    std::vector<boost::any> m_vec;
     DeSerializer m_deserializer;
 };
 
