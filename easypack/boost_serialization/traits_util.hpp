@@ -1,5 +1,5 @@
-#ifndef _TRAITS_H
-#define _TRAITS_H
+#ifndef _TRAITS_UTIL_H
+#define _TRAITS_UTIL_H
 
 #include <memory>
 #include <type_traits>

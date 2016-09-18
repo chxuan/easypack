@@ -1,24 +1,24 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include "easypack/EasyPack.hpp"
+#include "easypack/easypack.hpp"
 
-void testBaseType()
+void test_base_type()
 {
     std::cout << "Test base type:" << std::endl;
     try
     {
         int age = 20;
         std::string name = "Jack";
-        easypack::Pack p;
-        p.pack(age, name);
+        easypack::pack p;
+        p.pack_args(age, name);
 
         int age2 = 0;
         std::string name2;
-        easypack::UnPack up(p.getString());
-        up.unpack(age2, name2);
-        /* up.unpackTop(age2); */
-        /* up.unpackTop(name2); */
+        easypack::unpack up(p.get_string());
+        up.unpack_args(age2, name2);
+        /* up.unpack_top(age2); */
+        /* up.unpack_top(name2); */
 
         std::cout << "age: " << age2 << std::endl;
         std::cout << "name: " << name2 << std::endl;
@@ -29,7 +29,7 @@ void testBaseType()
     }
 }
 
-void testSTL()
+void test_stl()
 {
     std::cout << "Test stl type:" << std::endl;
     try
@@ -38,13 +38,13 @@ void testSTL()
         std::unordered_map<int, std::string> m;
         m.emplace(1, "Hello");
         m.emplace(2, "world");
-        easypack::Pack p;
-        p.pack(vec, m);
+        easypack::pack p;
+        p.pack_args(vec, m);
 
         std::vector<int> vec2;
         std::unordered_map<int, std::string> m2;
-        easypack::UnPack up(p.getString());
-        up.unpack(vec2, m2);
+        easypack::unpack up(p.get_string());
+        up.unpack_args(vec2, m2);
 
         for (auto& iter : vec2)
         {
@@ -61,7 +61,7 @@ void testSTL()
     }
 }
 
-void testTuple()
+void test_tuple()
 {
     std::cout << "Test tuple type:" << std::endl;
     try
@@ -69,14 +69,14 @@ void testTuple()
         std::tuple<int, std::string> tp = std::make_tuple(10, "Tom");
         std::tuple<int, std::string> tpp = std::make_tuple(11, "Jack");
         std::string name = "Marlin";
-        easypack::Pack p;
-        p.pack(tp, tpp, name);
+        easypack::pack p;
+        p.pack_args(tp, tpp, name);
 
         std::tuple<int, std::string> tp2;
         std::tuple<int, std::string> tpp2;
         std::string name2;
-        easypack::UnPack up(p.getString());
-        up.unpack(tp2, tpp2, name2);
+        easypack::unpack up(p.get_string());
+        up.unpack_args(tp2, tpp2, name2);
         std::cout << std::get<0>(tp2) << std::endl;
         std::cout << std::get<1>(tp2) << std::endl;
         std::cout << std::get<0>(tpp2) << std::endl;
@@ -112,7 +112,7 @@ struct PersonInfo
 #endif
 };
 
-void testClass()
+void test_class()
 {
 #ifdef ENABLE_BOOST_SERIALIZATION
     std::cout << "Test boost.serialization user-defined classes type:" << std::endl;
@@ -129,12 +129,12 @@ void testClass()
     try
     {
         PersonInfo info { "Jack", 20 };
-        easypack::Pack p;
-        p.pack(info);
+        easypack::pack p;
+        p.pack_args(info);
 
         PersonInfo person;
-        easypack::UnPack up(p.getString());
-        up.unpack(person);
+        easypack::unpack up(p.get_string());
+        up.unpack_args(person);
         std::cout << person.name << " " << person.age << std::endl;
     }
     catch (std::exception& e)
@@ -145,10 +145,10 @@ void testClass()
 
 int main()
 {
-    testBaseType();
-    testSTL();
-    testTuple();
-    testClass();
+    test_base_type();
+    test_stl();
+    test_tuple();
+    test_class();
     return 0;
 }
 
