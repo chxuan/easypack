@@ -23,28 +23,28 @@ Serialization framework based on boost.serialization、msgpack and json.
     ```cpp
     int age = 20;
     std::string name = "Jack";
-    easypack::Pack p;
-    p.pack(age, name);
+    easypack::pack p;
+    p.pack_args(age, name);
     
     int age2;
     std::string name2;
-    easypack::UnPack up(p.getString());
-    up.unpack(age2, name2); 
-    /* up.unpackTop(age2); */
-    /* up.unpackTop(name2); */
+    easypack::unpack up(p.getString());
+    up.unpack_args(age2, name2); 
+    /* up.unpack_top(age2); */
+    /* up.unpack_top(name2); */
     ```  
-可以看到，pack/unpack支持变参，并且还支持出栈式反序列化，使用非常方便。
+可以看到，pack_args/unpack_args支持变参，并且还支持出栈式反序列化，使用非常方便。
 
  * **std::tuple**
 
     ```cpp
     std::tuple<int, std::string> tp = std::make_tuple(10, "Tom");
-    easypack::Pack p;
-    p.pack(tp);
+    easypack::pack p;
+    p.pack_args(tp);
 
     std::tuple<int, std::string> tp2;
-    easypack::UnPack up(p.getString());
-    up.unpack(tp2);
+    easypack::unpack up(p.getString());
+    up.unpack_args(tp2);
     ```  
 boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提供了和序列化基本类型一样的接口。
 
@@ -55,19 +55,19 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     std::unordered_map<int, std::string> m;
     m.emplace(1, "Hello");
     m.emplace(2, "world");
-    easypack::Pack p;
-    p.pack(vec, m);
+    easypack::pack p;
+    p.pack_args(vec, m);
 
     std::vector<int> vec2;
     std::unordered_map<int, std::string> m2;
-    easypack::UnPack up(p.getString());
-    up.unpack(vec2, m2);
+    easypack::unpack up(p.getString());
+    up.unpack_args(vec2, m2);
     ```
 
  * **user-defined classes**
 
     ```cpp
-    struct PersonInfo
+    struct person_info
     {
         std::string name;
         int age;
@@ -90,13 +90,13 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     #endif
     };
     
-    PersonInfo info { "Jack", 20 };
-    easypack::Pack p;
-    p.pack(info);
+    person_info info { "Jack", 20 };
+    easypack::pack p;
+    p.pack_args(info);
 
-    PersonInfo person;
-    easypack::UnPack up(p.getString());
-    up.unpack(person);
+    person_info person;
+    easypack::unpack up(p.getString());
+    up.unpack_args(person);
     ```
     [boost][5]、[msgpack][6]、[kapok][7]序列化用户自定义类，更多细节请查看各自官网。
     
