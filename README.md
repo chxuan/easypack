@@ -28,7 +28,7 @@ Serialization framework based on boost.serialization、msgpack and json.
     
     int age2;
     std::string name2;
-    easypack::unpack up(p.getString());
+    easypack::unpack up(p.get_string());
     up.unpack_args(age2, name2); 
     /* up.unpack_top(age2); */
     /* up.unpack_top(name2); */
@@ -43,7 +43,7 @@ Serialization framework based on boost.serialization、msgpack and json.
     p.pack_args(tp);
 
     std::tuple<int, std::string> tp2;
-    easypack::unpack up(p.getString());
+    easypack::unpack up(p.get_string());
     up.unpack_args(tp2);
     ```  
 boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提供了和序列化基本类型一样的接口。
@@ -60,7 +60,7 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
 
     std::vector<int> vec2;
     std::unordered_map<int, std::string> m2;
-    easypack::unpack up(p.getString());
+    easypack::unpack up(p.get_string());
     up.unpack_args(vec2, m2);
     ```
 
@@ -95,7 +95,7 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     p.pack_args(info);
 
     person_info person;
-    easypack::unpack up(p.getString());
+    easypack::unpack up(p.get_string());
     up.unpack_args(person);
     ```
     [boost][5]、[msgpack][6]、[kapok][7]序列化用户自定义类，更多细节请查看各自官网。
