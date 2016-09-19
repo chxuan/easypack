@@ -30,7 +30,7 @@ public:
     }
 
     template<typename T>
-    void unpackTop(T& t)
+    void unpack_top(T& t)
     {
         _dr.Parse(parse());
         _dr.Deserialize(t);
