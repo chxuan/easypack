@@ -102,7 +102,7 @@ boost序列化默认不支持std::tuple类型，easypack序列化std::tuple提�
     
 ## Warning
 
- * 不支持指针，仅支持桟对象序列化。
+ * 不支持指针，仅支持栈对象序列化。
 
     
 ## 依赖性
