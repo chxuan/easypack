@@ -14,23 +14,23 @@ public:
     unpack() = default;
     unpack(const unpack&) = delete;
     unpack& operator=(const unpack&) = delete;
-    unpack(const std::string& content) : _is(std::move(content)), _ia(_is) {}
+    unpack(const std::string& content) : is_(std::move(content)), ia_(is_) {}
 
     template<typename... Args>
     void unpack_args(Args&&... args)
     {
-        unpack_args_impl(_ia, std::forward<Args>(args)...);
+        unpack_args_impl(ia_, std::forward<Args>(args)...);
     }
 
     template<typename T>
     void unpack_top(T& t)
     {
-        unpack_args_impl(_ia, t);
+        unpack_args_impl(ia_, t);
     }
 
 private:
-    std::istringstream _is;
-    boost::archive::binary_iarchive _ia;
+    std::istringstream is_;
+    boost::archive::binary_iarchive ia_;
 };
 
 }

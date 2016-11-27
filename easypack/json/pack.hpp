@@ -16,16 +16,16 @@ public:
     template<typename... Args>
     void pack_args(Args&&... args)
     {
-        _sr.Serialize(std::forward_as_tuple(args...));
+        sr_.Serialize(std::forward_as_tuple(args...));
     }
 
     std::string get_string()
     {
-        return _sr.GetString();
+        return sr_.GetString();
     }
 
 private:
-    Serializer _sr;
+    Serializer sr_;
 };
 
 }

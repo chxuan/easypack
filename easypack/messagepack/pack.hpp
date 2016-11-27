@@ -17,16 +17,16 @@ public:
     template<typename... Args>
     void pack_args(Args&&... args)
     {
-        pack_args_impl(_ss, std::forward<Args>(args)...);
+        pack_args_impl(ss_, std::forward<Args>(args)...);
     }
 
     std::string get_string()
     {
-        return _ss.str();
+        return ss_.str();
     }
 
 private:
-    std::stringstream _ss;
+    std::stringstream ss_;
 };
 
 }

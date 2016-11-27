@@ -13,22 +13,22 @@ class pack
 public:
     pack(const pack&) = delete;
     pack& operator=(const pack&) = delete;
-    pack() : _oa(_os) {}
+    pack() : oa_(os_) {}
 
     template<typename... Args>
     void pack_args(Args&&... args)
     {
-        pack_args_impl(_oa, std::forward<Args>(args)...);
+        pack_args_impl(oa_, std::forward<Args>(args)...);
     }
 
     std::string get_string()
     {
-        return _os.str();
+        return os_.str();
     }
 
 private:
-    std::ostringstream _os;
-    boost::archive::binary_oarchive _oa;
+    std::ostringstream os_;
+    boost::archive::binary_oarchive oa_;
 };
 
 }
