@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include "timer.hpp"
 #include "easypack/easypack.hpp"
 
 void test_base_type()
@@ -92,6 +93,12 @@ void test_tuple()
 struct PersonInfo
 {
     std::string name;
+    std::string name2;
+    std::string name3;
+    std::string name4;
+    std::string name5;
+    std::string name6;
+    std::string name7;
     int age;
 
 #ifdef ENABLE_BOOST_SERIALIZATION
@@ -99,16 +106,22 @@ struct PersonInfo
     void serialize(Archive& ar, const unsigned int)
     {
         ar & name;
+        ar & name2;
+        ar & name3;
+        ar & name4;
+        ar & name5;
+        ar & name6;
+        ar & name7;
         ar & age;
     }
 #endif
 
 #ifdef ENABLE_MSGPACK
-    MSGPACK_DEFINE(name, age);
+    MSGPACK_DEFINE(name, name2, name3, name4, name5, name6, name7, age);
 #endif
 
 #ifdef ENABLE_JSON
-    META(name, age);
+    META(name, name2, name3, name4, name5, name6, name7, age);
 #endif
 };
 
@@ -128,14 +141,20 @@ void test_class()
 
     try
     {
-        PersonInfo info { "Jack", 20 };
-        easypack::pack p;
-        p.pack_args(info);
+        timer t;
+        /* for (int i = 0; i < 1000000; ++i) */
+        for (int i = 0; i < 10000; ++i)
+        {
+            PersonInfo info { "Jack", "Jack", "Jack", "Jack", "Jack", "Jack", "Jack", 20 };
+            easypack::pack p;
+            p.pack_args(info);
 
-        PersonInfo person;
-        easypack::unpack up(p.get_string());
-        up.unpack_args(person);
-        std::cout << person.name << " " << person.age << std::endl;
+            PersonInfo person;
+            easypack::unpack up(p.get_string());
+            up.unpack_args(person);
+        }
+        /* std::cout << person.name << " " << person.age << std::endl; */
+        std::cout << "time: " << t.elapsed() << std::endl;
     }
     catch (std::exception& e)
     {
@@ -145,9 +164,9 @@ void test_class()
 
 int main()
 {
-    test_base_type();
-    test_stl();
-    test_tuple();
+    /* test_base_type(); */
+    /* test_stl(); */
+    /* test_tuple(); */
     test_class();
     return 0;
 }
